@@ -1,0 +1,33 @@
+
+syntax = "proto3";
+
+
+package trackpulse;
+
+option go_package = "trackpulse/proto;trackpulse";
+
+
+message Span {
+    string trace_id = 1;
+    string span_id = 2;
+    string parent_span_id = 3;
+    string service_name = 4;
+    string operation_name = 5;
+    int64 start_time_unix_nano = 6;
+    int64 duration_ms = 7;
+    string status_code = 8;
+    map<string, string> tags = 9;
+}
+
+message IngestReqest{
+    repeated Span spans = 1;
+}
+
+message IngestResponse{
+    int32 received_count = 1;
+    bool success = 2;
+}
+
+service TelemetryCollector{
+    rpc IngestSpans (IngestReqest) returns (IngestResponse);
+}
